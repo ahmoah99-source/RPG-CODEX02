@@ -1,63 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { themes } from '../theme'; 
 import db from '../database/db';
 
 const DashboardScreen = () => {
+  const [isDarkMode, setIsDarkMode] = useState(true); 
+  const theme = isDarkMode ? themes.dark : themes.light;
   const [characters, setCharacters] = useState([]);
 
+  // هذا هو الجزء الذي كان ينقص الكود ليعمل فعلياً
   useEffect(() => {
-    // جلب الشخصيات من قاعدة البيانات
-    const allChars = db.getAllSync('SELECT * FROM characters');
-    setCharacters(allChars);
+    try {
+      const allChars = db.getAllSync('SELECT * FROM characters');
+      setCharacters(allChars);
+    } catch (error) {
+      console.error("خطأ في جلب الشخصيات:", error);
+    }
   }, []);
 
-  const renderCharacterCard = ({ item }) => (
-    <ImageBackground 
-      source={require('../../assets/images/card-bg.png')} 
-      style={styles.card} 
-      imageStyle={styles.cardImage}
-    >
-      <View style={styles.overlay}>
-        <Text style={styles.name}>{item.name}</Text>
-        {/* عرض الإحصائيات الأساسية المتاحة في الـ Schema */}
-        <Text style={styles.stats}>القوة: {item.base_strength} | الرشاقة: {item.base_agility}</Text>
-        <Text style={styles.stats}>الجسد: {item.base_body} | الروح: {item.base_spirit}</Text>
-      </View>
-    </ImageBackground>
-  );
-
   return (
-    <View style={styles.container}>
-      {characters.length > 0 ? (
-        <FlatList 
-          data={characters} 
-          renderItem={renderCharacterCard} 
-          keyExtractor={(item) => item.id.toString()} 
-        />
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>لا توجد شخصيات حالياً، اضغط + للإضافة</Text>
-        </View>
-      )}
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <FlatList 
+        data={characters}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={<Text style={{ color: theme.text, textAlign: 'center', marginTop: 50 }}>لا توجد شخصيات</Text>}
+        renderItem={({ item }) => (
+          <View style={[styles.card, { backgroundColor: theme.card }]}>
+            <Text style={[styles.name, { color: theme.accent }]}>{item.name}</Text>
+            {/* يمكنك إضافة المزيد من الحقول هنا لاحقاً */}
+          </View>
+        )}
+      />
       
-      <TouchableOpacity style={styles.fab}>
-        <Text style={styles.fabText}>+</Text>
+      <TouchableOpacity style={[styles.fab, { backgroundColor: theme.accent }]}>
+        <Text style={{ color: theme.background, fontWeight: 'bold', fontSize: 24 }}>+</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#000' },
-  card: { height: 130, margin: 10 },
-  cardImage: { borderRadius: 10, opacity: 0.8 },
-  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', padding: 15, borderRadius: 10 },
-  name: { color: '#FFD700', fontSize: 20, fontWeight: 'bold' },
-  stats: { color: '#FFF', fontSize: 14, marginTop: 5 },
-  emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  emptyText: { color: '#888', fontSize: 16 },
-  fab: { position: 'absolute', bottom: 30, right: 30, backgroundColor: '#FFD700', width: 50, height: 50, borderRadius: 25, justifyContent: 'center', alignItems: 'center' },
-  fabText: { fontSize: 30, color: '#000' }
+  container: { flex: 1 },
+  card: { padding: 15, margin: 10, borderRadius: 12 },
+  name: { fontSize: 20, fontWeight: 'bold' },
+  fab: { 
+    position: 'absolute', bottom: 30, right: 30, width: 50, height: 50, 
+    borderRadius: 25, justifyContent: 'center', alignItems: 'center',
+    elevation: 5 // للظلال على أندرويد
+  }
 });
 
 export default DashboardScreen;
