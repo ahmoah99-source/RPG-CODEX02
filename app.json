@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "RPG Manager",
+    "slug": "rpg-manager",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#000000"
+      }
+    }
+  }
+}
