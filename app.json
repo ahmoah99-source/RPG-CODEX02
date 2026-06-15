@@ -1,18 +1,11 @@
 {
-  "expo": {
-    "name": "RPG Manager",
-    "slug": "rpg-manager",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#000000"
-      }
-    }
+  "name": "character-codex",
+  "version": "1.0.0",
+  "dependencies": {
+    "react-native": "0.74.0",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/material-top-tabs": "^6.6.5",
+    "colorthief": "^2.4.0",
+    "expo-linear-gradient": "^13.0.0"
   }
 }
