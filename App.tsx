@@ -1,28 +1,17 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { initDatabase } from './src/database/db';
-import DashboardScreen from './src/screens/DashboardScreen';
+import { AppNavigator } from './src/navigation/AppNavigator';
 
 export default function App() {
-  useEffect(() => {
-    // بناء الجداول مرة واحدة عند تشغيل التطبيق
-    initDatabase();
-  }, []);
-
+  useEffect(() => { initDatabase(); }, []);
   return (
-    <SafeAreaView style={styles.container}>
-      {/* StatusBar بتغير لونها حسب الوضع الليلي أو الفاتح 
-        ممكن نربطها لاحقاً بالثيم برضه
-      */}
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
       <StatusBar barStyle="light-content" />
-      <DashboardScreen />
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000', // اللون الافتراضي الأساسي
-  },
-});
