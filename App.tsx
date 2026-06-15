@@ -1,28 +1,28 @@
-// App.tsx
-import { useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useEffect } from 'react';
+import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import { initDatabase } from './src/database/db';
+import DashboardScreen from './src/screens/DashboardScreen';
 
 export default function App() {
-  
   useEffect(() => {
-    // Calling the database initialization logic when the app starts
+    // بناء الجداول مرة واحدة عند تشغيل التطبيق
     initDatabase();
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>RPG System Initialized Successfully!</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      {/* StatusBar بتغير لونها حسب الوضع الليلي أو الفاتح 
+        ممكن نربطها لاحقاً بالثيم برضه
+      */}
+      <StatusBar barStyle="light-content" />
+      <DashboardScreen />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#000', // اللون الافتراضي الأساسي
   },
 });
-
